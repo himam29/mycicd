@@ -24,3 +24,4 @@ vulnerability:
   ignore-unfixed: true
 db:
   skip-update: false
+ignorefile: .trivyignore
