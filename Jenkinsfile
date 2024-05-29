@@ -21,5 +21,12 @@ pipeline {
         echo '<----------------------Unit Test Done------------------>'
       }
     }
+    stage ('Build Docker Image'){
+      steps {
+        script {
+          sh 'docker build -t myrepo .'
+        }
+      }
+    }
   }
 }
