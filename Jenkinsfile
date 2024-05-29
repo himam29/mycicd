@@ -28,5 +28,24 @@ pipeline {
         }
       }
     }
+    stage('Scan Docker Image') {
+      steps {
+        script {
+          // Run Trivy to scan the Docker image
+          def trivyOutput = sh(script: "trivy image myrepo:latest", returnStdout: true).trim()
+
+             // Display Trivy scan results
+             println trivyOutput
+
+             // Check if vulnerabilities were found
+             if (trivyOutput.contains("Total: 0")) {
+                 echo "No vulnerabilities found in the Docker image."
+             } else {
+                 echo "Vulnerabilities found in the Docker image."
+                 error "Vulnerabilities found in Docker image."
+          }
+        }
+      }
+    }
   }
 }
