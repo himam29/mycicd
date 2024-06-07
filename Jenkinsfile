@@ -47,9 +47,10 @@ pipeline {
     stage('push image') {
       steps {
 //        withCredentials([gitUsernamePassword(credentialsId: 'gitlabproj', gitToolName: 'Default')]) {
-	  sh 'docker login registry.gitlab.com'
-          sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
-          sh 'docker push registry.gitlab.com/mylearning362622/mysample'
+//	  sh 'docker login registry.gitlab.com'
+          echo "$GL_CREDS_PASSWORD"| docker login registry.gitlab.com -u $GL_CREDS_USER --password-stdin
+//          sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
+//          sh 'docker push registry.gitlab.com/mylearning362622/mysample'
 //	}
       }
     }
