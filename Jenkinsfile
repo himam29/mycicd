@@ -6,6 +6,7 @@ pipeline {
   environment {
     VERSION = "${env.BUILD_ID}"
     NAME = "registry.gitlab.com/mylearning362622/mysample"
+    GL_CREDS = credentials('gitlabproj')
   }
 
   stages {
@@ -45,11 +46,11 @@ pipeline {
     }
     stage('push image') {
       steps {
-        withCredentials([gitUsernamePassword(credentialsId: 'gitlabproj', gitToolName: 'Default')]) {
+//        withCredentials([gitUsernamePassword(credentialsId: 'gitlabproj', gitToolName: 'Default')]) {
 	  sh 'docker login registry.gitlab.com'
           sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
           sh 'docker push registry.gitlab.com/mylearning362622/mysample'
-	}
+//	}
       }
     }
   }
