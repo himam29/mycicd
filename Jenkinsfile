@@ -3,6 +3,11 @@ pipeline {
   tools {
     maven "MyMaven"
   }
+  environment {
+    VERSION = "${env.BUILD_ID}"
+    NAME = "registry.gitlab.com/mylearning362622/mysample"
+  }
+
   stages {
     stage('Checkout from GitHub') {
       steps {
@@ -36,6 +41,15 @@ pipeline {
              // Display Trivy scan results
              println trivyOutput
         }
+      }
+    }
+    stage('push image') {
+      steps {
+        withCredentials([string(credentialsId: 'cicdgithubproject', variable: 'TOKEN')]) {
+	  sh 'echo "$TOKEN" | docker login registry.gitlab.com'
+          sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
+          sh 'docker push registry.gitlab.com/mylearning362622/mysample'
+	}
       }
     }
   }
