@@ -48,6 +48,7 @@ pipeline {
       steps {
 //        withCredentials([gitUsernamePassword(credentialsId: 'gitlabproj', gitToolName: 'Default')]) {
 //	  sh 'docker login registry.gitlab.com'
+          sh 'echo $CI_DEPLOY_USER'
           sh 'echo "$CI_DEPLOY_PASSWORD"| docker login registry.gitlab.com -u $CI_DEPLOY_USER --password-stdin'
 //          sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
 //          sh 'docker push registry.gitlab.com/mylearning362622/mysample'
