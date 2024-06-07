@@ -3,11 +3,6 @@ pipeline {
   tools {
     maven "MyMaven"
   }
-  environment {
-    VERSION = "${env.BUILD_ID}"
-    NAME = "registry.gitlab.com/mylearning362622/mysample"
-    GL_CREDS = credentials('gitlabproj')
-  }
 
   stages {
     stage('Checkout from GitHub') {
@@ -15,7 +10,7 @@ pipeline {
         git branch: 'main', url: 'https://github.com/himam29/mycicd.git'
       }
     }
-	stage ('Maven Build'){
+    stage ('Maven Build'){
       steps {
         sh 'mvn clean install'
       } 
@@ -46,8 +41,8 @@ pipeline {
     }
     stage('push image') {
       steps {
-        withCredentials([gitUsernamePassword(credentialsId: 'gitlabproj', gitToolName: 'Default')]) {
-	  sh 'docker login registry.gitlab.com'
+        withCredentials([usernamePassword(credentialsId: 'gitlabproj', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+	  sh 'docker login registry.gitlab.com -u $USERNAME -p $PASSWORD '
 //          sh 'echo $CI_DEPLOY_USER'
 //          sh 'echo "$CI_DEPLOY_PASSWORD"| docker login registry.gitlab.com -u $CI_DEPLOY_USER --password-stdin'
           sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
