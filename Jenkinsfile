@@ -46,7 +46,7 @@ pipeline {
     stage('push image') {
       steps {
         withCredentials([string(credentialsId: 'cicdgithubproject', variable: 'TOKEN')]) {
-	  sh 'echo "$TOKEN" | docker login registry.gitlab.com'
+	  sh 'echo "$TOKEN" | docker login registry.gitlab.com --password-stdin'
           sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
           sh 'docker push registry.gitlab.com/mylearning362622/mysample'
 	}
