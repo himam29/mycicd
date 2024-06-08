@@ -45,12 +45,28 @@ pipeline {
     }
     stage('push image') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'gitlabproj', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-	  sh 'docker login registry.gitlab.com -u $USERNAME -p $PASSWORD '
+        withCredentials([usernamePassword(credentialsId: 'gitlabproj', usernameVariable: 'GL_USERNAME', passwordVariable: 'GL_PASSWORD')]) {
+	  sh 'docker login registry.gitlab.com -u $GL_USERNAME -p $GL_PASSWORD '
           sh 'docker build -t ${NAME}:${VERSION} .'
           sh 'docker push ${NAME}:${VERSION}'
 	}
       }
     }
+    stage('Update Tag in Helm Repo') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'gitlabproj', usernameVariable: 'GL_USERNAME', passwordVariable: 'GL_PASSWORD')]) {
+	  git branch: 'main', credentialsId: 'gitlabproj', url: 'https://gitlab.com/mylearning362622/mysample.git'
+          echo 'Updating Image TAG'
+          sh 'sed -i "s/mysample:.*/mysample:${VERSION}/g" Values.yaml'
+          echo 'Git Config'
+          sh 'git config --global user.email "Jenkins@company.com"'
+          sh 'git config --global user.name "Jenkins-ci"'
+          sh 'git add Values.yaml'
+          sh 'git commit -am "Update Image tag"'
+          sh 'git push https://${GL_USERNAME}:${GL_PASSWORD}@gitlab.com/mylearning362622/mysample.git '  
+        }
+      }
+    }
+
   }
 }
