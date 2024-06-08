@@ -3,6 +3,10 @@ pipeline {
   tools {
     maven "MyMaven"
   }
+  environment {
+    VERSION = "${env.BUILD_ID}"
+    NAME = "registry.gitlab.com/mylearning362622/mysample"
+  }
 
   stages {
     stage('Checkout from GitHub') {
@@ -43,10 +47,8 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: 'gitlabproj', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 	  sh 'docker login registry.gitlab.com -u $USERNAME -p $PASSWORD '
-//          sh 'echo $CI_DEPLOY_USER'
-//          sh 'echo "$CI_DEPLOY_PASSWORD"| docker login registry.gitlab.com -u $CI_DEPLOY_USER --password-stdin'
-          sh 'docker build -t registry.gitlab.com/mylearning362622/mysample .'
-          sh 'docker push registry.gitlab.com/mylearning362622/mysample'
+          sh 'docker build -t ${NAME}:${VERSION} .'
+          sh 'docker push ${NAME}:${VERSION}'
 	}
       }
     }
