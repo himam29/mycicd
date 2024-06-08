@@ -63,7 +63,7 @@ pipeline {
           sh 'git config --global user.name "Jenkins-ci"'
           sh 'git add Values.yaml'
           sh 'git commit -m "Update Image tag to ${VERSION}"'
-          sh 'git push https://${GL_USERNAME}:${GL_PASSWORD}@gitlab.com/mylearning362622/mysample.git'
+          sh 'git push https://gitlab.com/mylearning362622/mysample.git -u GL_USERNAME -p GL_PASSWORD'
          // sh 'git push --set-upstream origin main'
 
         }
