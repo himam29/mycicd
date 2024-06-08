@@ -55,7 +55,8 @@ pipeline {
     stage('Update Tag in Helm Repo') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'gitlabproj', usernameVariable: 'GL_USERNAME', passwordVariable: 'GL_PASSWORD')]) {
-	  git branch: 'main', credentialsId: 'gitlabproj', url: 'https://gitlab.com/mylearning362622/mysample.git'
+          sh 'git config credential.helper cache'
+          git branch: 'main', credentialsId: 'gitlabproj', url: 'https://gitlab.com/mylearning362622/mysample.git'
           echo 'Updating Image TAG'
           sh 'sed -i "s/mysample:.*/mysample:${VERSION}/g" Values.yaml'
           echo 'Git Config'
@@ -63,7 +64,8 @@ pipeline {
           sh 'git config --global user.name "Jenkins-ci"'
           sh 'git add Values.yaml'
           sh 'git commit -m "Update Image tag to ${VERSION}"'
-          sh 'git push https://gitlab.com/mylearning362622/mysample.git -u GL_USERNAME -p GL_PASSWORD'
+          sh 'git push https://gitlab.com/mylearning362622/mysample.git'
+	  sh 'git config --unset credential.helper'
          // sh 'git push --set-upstream origin main'
 
         }
