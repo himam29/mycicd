@@ -62,7 +62,7 @@ pipeline {
           echo 'Git Config'
           sh 'git config --global user.email "Jenkins@company.com"'
           sh 'git config --global user.name "Jenkins-ci"'
-          sh 'git add Values.yaml'
+          sh 'git add helm_app_dir/values.yaml'
           sh 'git commit -m "Update Image tag to ${VERSION}"'
           sh 'git push https://gitlab.com/mylearning362622/mysample.git'
 	  sh 'git config --unset credential.helper'
