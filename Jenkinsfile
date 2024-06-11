@@ -58,7 +58,7 @@ pipeline {
           sh 'git config credential.helper cache'
           git branch: 'main', credentialsId: 'gitlabproj', url: 'https://gitlab.com/mylearning362622/mysample.git'
           echo 'Updating Image TAG'
-          sh 'sed -i "s/mysample:.*/mysample:${VERSION}/g" Values.yaml'
+          sh 'sed -i "s/mysample:.*/mysample:${VERSION}/g" helm_app_dir/values.yaml'
           echo 'Git Config'
           sh 'git config --global user.email "Jenkins@company.com"'
           sh 'git config --global user.name "Jenkins-ci"'
